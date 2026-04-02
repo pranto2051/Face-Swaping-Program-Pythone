@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: deepfake_v3
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/deepfake_v3
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "5001:5001"
+    depends_on:
+      - redis
+      - db
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  worker_gpu:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/deepfake_v3
+      - REDIS_URL=redis://redis:6379/0
+      - CUDA_VISIBLE_DEVICES=0
+    command: celery -A workers.tasks worker --loglevel=info -Q gpu_fast,gpu_heavy
+    depends_on:
+      - redis
+      - db
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]

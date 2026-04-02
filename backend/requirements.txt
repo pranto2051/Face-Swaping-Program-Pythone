@@ -1,0 +1,177 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# MPS-Optimized Requirements for M1/M2 Pro MacBooks with PyTorch
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Core Web Framework
+Flask==3.1.3
+flask-cors==6.0.2
+Flask-SocketIO==5.6.1
+Flask-SQLAlchemy==3.1.1
+Werkzeug==3.1.6
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+itsdangerous==2.2.0
+
+# WebSocket & Communication
+python-socketio==5.16.1
+python-engineio==4.13.1
+simple-websocket==1.1.0
+bidict==0.23.1
+wsproto==1.3.2
+
+# Async Task Queue
+celery==5.6.2
+redis==7.2.1
+kombu==5.6.2
+amqp==5.3.1
+billiard==4.2.4
+click==8.3.1
+click-didyoumean==0.3.1
+click-plugins==1.1.1.2
+click-repl==0.3.0
+vine==5.1.0
+prompt_toolkit==3.0.52
+
+# Database
+SQLAlchemy==2.0.48
+
+# PyTorch & Deep Learning (MPS Compatible)
+# ⚠️  IMPORTANT: Install torch manually for M1 Pro:
+#    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+torch==2.4.0  # or newer with MPS support
+torchvision==0.19.0
+torchaudio==2.4.0
+
+# Face Detection & Recognition (CPU/MPS Compatible)
+insightface==0.7.3
+onnx==1.20.1
+onnxruntime==1.24.2  # CPU provider only (no CUDA/CoreML on macOS)
+
+# Image Enhancement Models (GFPGAN, Real-ESRGAN, CodeFormer, RealDiff)
+# ⚠️  Note: These may require manual model downloads - see guide below
+gfpgan==1.3.8
+basicsr==1.4.2
+facexlib==0.3.0
+realesrgan==0.3.0
+# CodeFormer for face restoration
+codeformer==0.1.0
+
+# Face Swap Libraries & Models
+# DeepFaceLab components
+# deepfacelab==20210728  # See installation guide for manual install
+# DeepFake model libraries
+onnx>=1.15.0
+opencv-contrib-python==4.13.0.92
+
+# Diffusion Models for Enhancement (for DeepFake refinement)
+diffusers==0.31.0
+transformers==4.42.3
+safetensors==0.4.8
+
+# Scientific & Image Processing
+numpy==2.1.0
+scipy==1.14.1
+opencv-python==4.13.0.92
+opencv-python-headless==4.13.0.92
+Pillow==12.1.1
+scikit-image==0.24.0
+scikit-learn==1.8.0
+imageio==2.37.2
+
+# Video Processing
+moviepy==1.0.3
+
+# Utilities
+psutil==7.2.2  # System monitoring (temperature, memory)
+tqdm==4.67.3
+requests==2.32.5
+
+# Data Processing
+albumentations==2.0.8
+albucore==0.0.24
+easydict==1.13
+
+# Configuration & Validation
+pydantic==2.12.5
+pydantic_core==2.41.5
+PyYAML==6.0.3
+
+# ML & Math Utilities
+matplotlib==3.10.8
+networkx==3.6.1
+sympy==1.14.0
+mpmath==1.3.0
+joblib==1.5.3
+threadpoolctl==3.6.0
+cython==3.2.4
+
+# Serialization & Formats
+protobuf==7.34.0
+flatbuffers==25.12.19
+ml_dtypes==0.5.4
+
+# Type Hints & Extensions
+typing_extensions==4.15.0
+typing-inspection==0.4.2
+annotated-types==0.7.0
+
+# System & Utilities
+filelock==3.25.0
+certifi==2026.2.25
+charset-normalizer==3.4.4
+idna==3.11
+urllib3==2.6.3
+packaging==26.0
+setuptools==82.0.0
+
+# Date/Time
+python-dateutil==2.9.0.post0
+tzdata==2025.3
+tzlocal==5.3.1
+
+# Miscellaneous
+prettytable==3.17.0
+stringzilla==4.6.0
+simsimd==6.5.13
+kiwisolver==1.4.9
+cycler==0.12.1
+fonttools==4.61.1
+contourpy==1.3.3
+lazy_loader==0.4
+fsspec==2026.2.0
+six==1.17.0
+wcwidth==0.6.0
+
+# ⚠️  macOS-Specific Notes:
+# 
+# 1. PYTORCH INSTALLATION (MPS Compatible):
+#    DO NOT use "pip install torch" - it won't have MPS support
+#    Instead use official PyTorch wheel:
+#    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+#
+# 2. NO NVIDIA GPU / NO CUDA:
+#    • We use CPU execution provider for ONNX Runtime
+#    • MPS is used for PyTorch operations
+#    • CodeFormer works on CPU/MPS
+#    • Real-ESRGAN works on CPU/MPS
+#
+# 3. REMOVE CUDA-ONLY PACKAGES:
+#    • nvidia-ml-py  ← REMOVED (no NVIDIA GPU)
+#    • pynvml  ← REMOVED (NVIDIA monitoring, not needed)
+#
+# 4. MODEL DOWNLOADS (Manual Required):
+#    Before using High Quality / Ultra modes, download models:
+#
+#    CodeFormer:
+#    wget -O ~/.cache/codeformer/codeformer.pth \
+#      https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth
+#
+#    Real-ESRGAN 2x Compact:
+#    wget -O ~/.cache/realesrgan/RealESRGAN_x2_compact.pth \
+#      https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5/RealESRGAN_x2_compact.pth
+#
+# 5. MEMORY SETTINGS (M1 Pro 16GB):
+#    • Safe allocation: 60% of available RAM = ~6GB per operation
+#    • Always process with batch_size=1
+#    • Clear GPU cache between images
+#    • Max image size: 2048x2048
