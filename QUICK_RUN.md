@@ -1,9 +1,9 @@
 # 🚀 Quick Run Commands
 
-## Single Line Command (Run Both Backend & Frontend)
+## One-Line Command (Run Both Backend & Frontend)
 
 ```bash
-(cd "/Users/md.prantoislam/Desktop/Face Swap" && source .venv/bin/activate && cd backend && python app.py) & sleep 2 && (cd "/Users/md.prantoislam/Desktop/Face Swap" && npm run dev)
+(source .venv/bin/activate && cd backend && python -u app.py) & npm run dev
 ```
 
 **After running:** Open `http://localhost:8080` in your browser
@@ -14,12 +14,12 @@
 
 ### Terminal 1 - Backend
 ```bash
-cd "/Users/md.prantoislam/Desktop/Face Swap" && source .venv/bin/activate && cd backend && python app.py
+source .venv/bin/activate && cd backend && python -u app.py
 ```
 
 ### Terminal 2 - Frontend
 ```bash
-cd "/Users/md.prantoislam/Desktop/Face Swap" && npm run dev
+npm run dev
 ```
 
 ---
@@ -70,6 +70,12 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r backend/requirements.txt
+```
+
+If the backend still stops on missing modules, install the runtime packages into `.venv` and try again:
+
+```bash
+python -m pip install Flask-SocketIO python-socketio python-engineio psutil pynvml insightface
 ```
 
 Then use the commands above to run the servers.
